@@ -1,0 +1,1177 @@
+/* ==========================================================================
+   MITESH LADVA — EXECUTIVE DIGITAL BUSINESS CARD & NFC PORTFOLIO
+   Founder & Managing Partner • Ladva Enterprises
+   Color Theme: Midnight Navy (#101B2D), Deep Navy (#172943), Champagne Gold (#C9A96E)
+   Mobile Card Viewport (Optimized specifically for Smartphones & NFC Tapping)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Design Tokens (Executive Navy & Champagne Gold Theme)
+   -------------------------------------------------------------------------- */
+:root {
+  /* Core Dark Theme */
+  --bg-page: #0A111D;
+  --bg-card: #101B2D;
+  --bg-card-elevated: #172943;
+  --bg-card-subtle: #132137;
+  --bg-surface: #1E3557;
+
+  /* Typography Colors */
+  --text-primary: #FFFFFF;
+  --text-secondary: #F7F4ED;
+  --text-muted: #9AA5B5;
+  --text-dim: #64748B;
+
+  /* Champagne Gold Accents */
+  --gold-primary: #C9A96E;
+  --gold-light: #DFCEAA;
+  --gold-dark: #B89355;
+  --gold-glow: rgba(201, 169, 110, 0.28);
+  --gold-soft-bg: rgba(201, 169, 110, 0.10);
+  --gold-border: rgba(201, 169, 110, 0.35);
+
+  /* Borders & Accents */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-elevated: rgba(201, 169, 110, 0.22);
+  --emerald-accent: #10b981;
+  --emerald-soft-bg: rgba(16, 185, 129, 0.12);
+
+  /* Shadows */
+  --shadow-card: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+  --shadow-gold: 0 0 25px -4px rgba(201, 169, 110, 0.32);
+}
+
+/* Light Theme Override (Warm Ivory Executive) */
+[data-theme="light"] {
+  --bg-page: #EAE6DC;
+  --bg-card: #FAF8F5;
+  --bg-card-elevated: #FFFFFF;
+  --bg-card-subtle: #F2EFE9;
+  --bg-surface: #E5E0D5;
+
+  --text-primary: #101B2D;
+  --text-secondary: #172943;
+  --text-muted: #5A6980;
+  --text-dim: #7E8C9F;
+
+  --gold-primary: #947239;
+  --gold-light: #B89355;
+  --gold-dark: #785A2A;
+  --gold-glow: rgba(184, 147, 85, 0.2);
+  --gold-soft-bg: rgba(184, 147, 85, 0.12);
+  --gold-border: rgba(184, 147, 85, 0.35);
+
+  --border-subtle: rgba(16, 27, 45, 0.08);
+  --border-elevated: rgba(148, 114, 57, 0.25);
+  --shadow-card: 0 20px 45px -10px rgba(16, 27, 45, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   2. Reset & Base Typography
+   -------------------------------------------------------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-secondary);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-x: hidden;
+  padding-bottom: 84px; /* Space for fixed bottom action bar */
+}
+
+/* Ambient Backdrop for Desktop */
+.ambient-mesh-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 20%, rgba(201, 169, 110, 0.08) 0%, transparent 60%),
+              radial-gradient(circle at 10% 80%, rgba(23, 41, 67, 0.6) 0%, transparent 50%);
+  z-index: 0;
+}
+
+/* --------------------------------------------------------------------------
+   3. Main Card Viewport (Phone-Sized Container)
+   -------------------------------------------------------------------------- */
+.card-viewport {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 480px; /* Designed to fit comfortably on phones & look like a sleek card on desktop */
+  background-color: var(--bg-card);
+  min-height: 100vh;
+  box-shadow: var(--shadow-card);
+  border-left: 1px solid var(--border-subtle);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+}
+
+/* --------------------------------------------------------------------------
+   4. Profile Header Card
+   -------------------------------------------------------------------------- */
+.profile-header-card {
+  position: relative;
+  padding: 28px 20px 22px;
+  background: linear-gradient(180deg, var(--bg-card-elevated) 0%, var(--bg-card) 100%);
+  border-bottom: 1px solid var(--border-elevated);
+  text-align: center;
+  overflow: hidden;
+}
+
+.card-gold-accent-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #DFCEAA, #C9A96E, #B89355, #DFCEAA);
+}
+
+/* Profile Photo Frame */
+.profile-frame-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.avatar-container {
+  position: relative;
+  width: 124px;
+  height: 124px;
+  margin: 0 auto;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(135deg, #DFCEAA, #C9A96E, #947239);
+  box-shadow: var(--shadow-gold);
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  background-color: #101B2D;
+}
+
+.verified-seal {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #101B2D;
+  border: 2px solid #C9A96E;
+  color: #C9A96E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.experience-pill-floating {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 12px;
+  border-radius: 20px;
+  background: var(--gold-soft-bg);
+  border: 1px solid var(--gold-border);
+  color: var(--gold-primary);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Identity Block */
+.advisor-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 4px;
+  letter-spacing: -0.3px;
+}
+
+.brand-heading-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.brand-text {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.role-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.role-tag-gold {
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--gold-soft-bg);
+  border: 1px solid var(--gold-border);
+  color: var(--gold-primary);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.role-tag-navy {
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.hero-trust-intro {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 12px;
+  line-height: 1.5;
+  padding: 0 8px;
+}
+
+/* Quick Action Circle Icons */
+.header-quick-contacts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.quick-icon-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+  color: var(--text-muted);
+  transition: transform 0.2s, color 0.2s;
+}
+
+.quick-icon-btn:active {
+  transform: scale(0.92);
+}
+
+.icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--gold-primary);
+  transition: all 0.2s;
+}
+
+.quick-icon-btn.whatsapp .icon-circle {
+  background: var(--emerald-soft-bg);
+  color: var(--emerald-accent);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.quick-icon-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Dual Primary Hero Action Buttons */
+.hero-card-buttons-wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.btn-primary-vcard-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 12px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #DFCEAA 0%, #C9A96E 50%, #B89355 100%);
+  color: #101B2D;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
+  cursor: pointer;
+  box-shadow: var(--shadow-gold);
+  transition: transform 0.15s, filter 0.15s;
+}
+
+.btn-primary-vcard-hero:active {
+  transform: scale(0.97);
+}
+
+.btn-download-visiting-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 12px;
+  border-radius: 12px;
+  background: var(--bg-card-subtle);
+  color: var(--text-primary);
+  border: 1px solid var(--gold-border);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s, background-color 0.15s;
+}
+
+.btn-download-visiting-card:active {
+  transform: scale(0.97);
+}
+
+/* Utility Row (Share Profile & Theme Toggle) */
+.hero-utility-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.btn-utility-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-utility-pill:hover,
+.btn-utility-pill:active {
+  color: var(--gold-primary);
+  border-color: var(--gold-border);
+}
+
+/* --------------------------------------------------------------------------
+   5. Horizontal Scrollable Navigation Tabs
+   -------------------------------------------------------------------------- */
+.card-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--bg-card-elevated);
+  border-bottom: 1px solid var(--border-subtle);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.card-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 24px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tab-btn i {
+  font-size: 14px;
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, #DFCEAA, #C9A96E);
+  color: #101B2D;
+  border-color: #C9A96E;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(201, 169, 110, 0.25);
+}
+
+/* --------------------------------------------------------------------------
+   6. Tab Panels & Content Sections
+   -------------------------------------------------------------------------- */
+.tab-panel {
+  display: none;
+  padding: 22px 18px 40px;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.tab-section-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.2px;
+}
+
+.tab-section-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+/* QR Code Section Container */
+.qr-card-container {
+  margin-top: 18px;
+  padding: 24px 16px;
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border-elevated);
+  border-radius: 16px;
+  text-align: center;
+}
+
+.qr-code-holder {
+  display: inline-flex;
+  padding: 14px;
+  background: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  margin: 0 auto;
+}
+
+.qr-code-holder canvas,
+.qr-code-holder img {
+  display: block;
+  max-width: 190px;
+  height: auto;
+}
+
+.qr-scan-guide {
+  margin-top: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.qr-url-text {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  word-break: break-all;
+}
+
+.qr-actions-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.btn-qr-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 14px;
+  border-radius: 10px;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--gold-border);
+  color: var(--gold-primary);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-qr-action:active {
+  transform: scale(0.96);
+}
+
+/* WhatsApp Mobile Forwarder Box */
+.forward-card-box {
+  margin-top: 18px;
+  padding: 18px 16px;
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+}
+
+.forward-box-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--emerald-accent);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.forward-box-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.forward-input-wrap {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.forward-phone-input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-elevated);
+  color: var(--text-primary);
+  font-size: 13px;
+  outline: none;
+}
+
+.forward-phone-input:focus {
+  border-color: var(--gold-primary);
+}
+
+.btn-forward-submit {
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: #10b981;
+  color: #ffffff;
+  border: none;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* About Section Blocks */
+.about-card-box {
+  margin-top: 16px;
+  padding: 18px;
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+}
+
+.about-paragraph {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.about-paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.pedigree-box {
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 10px;
+  background: var(--bg-card-subtle);
+  border-left: 3px solid var(--gold-primary);
+}
+
+.pedigree-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pedigree-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.5;
+}
+
+.pill-tags-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tech-tag {
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--gold-primary);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Service Cards */
+.service-card {
+  margin-top: 14px;
+  padding: 16px;
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  transition: border-color 0.2s;
+}
+
+.service-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.service-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--gold-soft-bg);
+  border: 1px solid var(--gold-border);
+  color: var(--gold-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.service-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.service-tagline {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.service-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+.service-deliverables {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-subtle);
+  list-style: none;
+}
+
+.service-deliverables li {
+  font-size: 11px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+
+.service-deliverables li i {
+  color: var(--gold-primary);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+/* Industry Cards Grid */
+.industries-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.industry-card {
+  padding: 14px;
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+}
+
+.industry-icon {
+  font-size: 22px;
+  color: var(--gold-primary);
+  margin-bottom: 6px;
+}
+
+.industry-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.industry-highlight {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.3;
+}
+
+/* Impact & Stats Counters */
+.stats-banner-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.stat-item-box {
+  padding: 14px;
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border-elevated);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-number {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--gold-primary);
+}
+
+.stat-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.stat-desc {
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Client Logo Wall */
+.clients-logo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.client-logo-item {
+  padding: 12px 6px;
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.client-logo-item img {
+  max-height: 32px;
+  max-width: 85px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.8;
+}
+
+/* Testimonial Card */
+.testimonial-box {
+  margin-top: 14px;
+  padding: 14px;
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+}
+
+.testimonial-quote {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.testimonial-author {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.author-name {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.author-company {
+  color: var(--gold-primary);
+}
+
+/* Consultation Form */
+.consultation-form-wrap {
+  margin-top: 16px;
+  padding: 18px;
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-elevated);
+  color: var(--text-primary);
+  font-size: 12px;
+  outline: none;
+  font-family: inherit;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--gold-primary);
+}
+
+.btn-form-submit {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #DFCEAA, #C9A96E, #B89355);
+  color: #101B2D;
+  border: none;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: var(--shadow-gold);
+  margin-top: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   7. Fixed Bottom Action Bar (Mobile Sticky)
+   -------------------------------------------------------------------------- */
+.bottom-action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  z-index: 100;
+  background: rgba(16, 27, 45, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border-elevated);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.3fr 1fr;
+  padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+  gap: 6px;
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.bottom-action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 2px;
+  border-radius: 10px;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s, background-color 0.15s;
+}
+
+.bottom-action-btn:active {
+  transform: scale(0.94);
+}
+
+.bottom-action-btn i {
+  font-size: 17px;
+  color: var(--gold-primary);
+}
+
+.bottom-action-btn span {
+  font-size: 10px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.bottom-action-btn.whatsapp i {
+  color: #10b981;
+}
+
+.bottom-action-btn.primary-save {
+  background: linear-gradient(135deg, #DFCEAA, #C9A96E, #B89355);
+  color: #101B2D;
+  border: none;
+  box-shadow: 0 4px 14px rgba(201, 169, 110, 0.35);
+}
+
+.bottom-action-btn.primary-save i {
+  color: #101B2D;
+}
+
+.bottom-action-btn.primary-save span {
+  color: #101B2D;
+  font-weight: 800;
+}
+
+/* --------------------------------------------------------------------------
+   8. Share Modal Popup
+   -------------------------------------------------------------------------- */
+.share-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 17, 29, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.share-modal-overlay.open {
+  display: flex;
+}
+
+.share-modal-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-card);
+  border: 1px solid var(--gold-border);
+  border-radius: 18px;
+  padding: 24px 20px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+  position: relative;
+  animation: fadeIn 0.25s ease;
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.share-modal-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.share-channel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.share-channel-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 6px;
+  border-radius: 10px;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.share-channel-btn i {
+  font-size: 22px;
+  color: var(--gold-primary);
+}
+
+.share-channel-btn.whatsapp i {
+  color: #10b981;
+}
+
+.share-channel-btn.linkedin i {
+  color: #0a66c2;
+}
+
+.copy-url-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.copy-url-input {
+  flex: 1;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  font-size: 11px;
+  outline: none;
+}
+
+.btn-copy-link {
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: var(--gold-soft-bg);
+  border: 1px solid var(--gold-border);
+  color: var(--gold-primary);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   9. Toast Notification
+   -------------------------------------------------------------------------- */
+.toast-box {
+  position: fixed;
+  bottom: 84px;
+  left: 50%;
+  transform: translateX(-50%) translateY(50px);
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--gold-border);
+  color: var(--text-primary);
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  max-width: 90vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toast-box.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* --------------------------------------------------------------------------
+   10. Footer Section
+   -------------------------------------------------------------------------- */
+.card-footer-mini {
+  padding: 20px 16px;
+  text-align: center;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--bg-card-subtle);
+  margin-top: auto;
+}
+
+.footer-copy {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.footer-brand {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold-primary);
+  margin-top: 2px;
+}
+
