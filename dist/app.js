@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
     vcardTitle: "AI & Tech Consultant | ISO Certification | Digital Transformation",
     company: "Ladva Enterprises",
     quote: "Make your life easy with us",
-    oneLineHeadline: "Empowering high-growth enterprises and mid-market leaders through strategic vision, operational excellence, and measurable financial ROI.",
     phoneDisplay: "+91 95948 89811",
     phoneClean: "9594889811",
     phoneInternational: "+919594889811",
