@@ -230,7 +230,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 9px;
+  flex-wrap: wrap;
   margin-top: 18px;
 }
 
@@ -273,6 +274,12 @@ body {
   border-color: var(--sky-border);
   color: var(--sky-primary);
   background: #f0f9ff;
+}
+
+.quick-icon-btn.instagram .icon-circle {
+  border-color: #fbcfe8;
+  color: #e1306c;
+  background: #fdf2f8;
 }
 
 .quick-icon-label {

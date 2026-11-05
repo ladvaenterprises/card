@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     companyWebsite: "https://ladvaenterprises.com/",
     cardWebsite: "https://card.ladvaenterprises.com/",
     linkedinUrl: "https://www.linkedin.com/in/miteshladva/",
+    instagramUrl: "https://www.instagram.com/ladvaenterprises/",
     photoUrl: "assets/profile.png",
     logoUrl: "assets/ladva-logo.png",
     vcfFileName: "Mitesh_Ladva.vcf",
@@ -220,6 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
       `URL;TYPE=WORK:${CONFIG.companyWebsite}`,
       `URL;TYPE=PREF:${CONFIG.cardWebsite}`,
       `X-SOCIALPROFILE;TYPE=linkedin:${CONFIG.linkedinUrl}`,
+      `X-SOCIALPROFILE;TYPE=instagram:${CONFIG.instagramUrl}`,
       `ADR;TYPE=WORK,POSTAL,PARCEL:;;Mumbai;Maharashtra;;India`,
       `NOTE:${CONFIG.quote} | ${CONFIG.vcardTitle}`,
       'REV:' + new Date().toISOString().replace(/[-:.]/g, ''),
@@ -512,7 +514,8 @@ document.addEventListener('DOMContentLoaded', () => {
     `📞 *Call:* ${CONFIG.phoneDisplay}\n` +
     `✉️ *Email:* ${CONFIG.email}\n` +
     `🌐 *Digital Card:* ${CONFIG.cardWebsite}\n` +
-    `🏢 *Website:* ${CONFIG.companyWebsite}`;
+    `🏢 *Website:* ${CONFIG.companyWebsite}\n` +
+    `📸 *Instagram:* ${CONFIG.instagramUrl}`;
 
   const modalShareWhatsapp = document.getElementById('modalShareWhatsapp');
   if (modalShareWhatsapp) {
