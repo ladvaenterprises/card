@@ -29,3 +29,4 @@ if (fs.existsSync(assetsSrc)) {
 }
 
 console.log('✓ Vercel build output successfully generated in dist/');
+

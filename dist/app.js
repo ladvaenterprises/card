@@ -1,49 +1,43 @@
 /**
  * MITESH LADVA — EXECUTIVE DIGITAL BUSINESS CARD ENGINE
- * Founder & Managing Partner • Ladva Enterprises
- * Pure Vanilla JavaScript (Zero Build Tools, Zero Node Dependencies)
+ * Color Palette: Light Blue, Pure White, and Deep Slate Teal (#18343f)
+ * Target URL: https://card.ladvaenterprises.com/
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
   // --------------------------------------------------------------------------
-  // 1. Central Executive Profile Configuration
+  // 1. Central Profile Configuration
   // --------------------------------------------------------------------------
   const CONFIG = {
     fullName: "Mitesh Ladva",
     firstName: "Mitesh",
     lastName: "Ladva",
-    title: "Founder & Managing Partner",
+    title: "Founder",
+    professionalBadge: "AI & Technology Consultant",
+    vcardTitle: "AI & Tech Consultant | ISO Certification | Digital Transformation",
     company: "Ladva Enterprises",
-    tagline: "Strategic Consulting • Operational Excellence • Digital Transformation",
-    experience: "20+ Years of Strategic Consulting",
+    quote: "Make your life easy with us",
+    oneLineHeadline: "Empowering high-growth enterprises and mid-market leaders through strategic vision, operational excellence, and measurable financial ROI.",
     phoneDisplay: "+91 95948 89811",
     phoneClean: "9594889811",
     phoneInternational: "+919594889811",
     whatsappClean: "919594889811",
     email: "info@ladvaenterprises.com",
-    personalEmail: "miteshladva@gmail.com",
-    location: "Mumbai, Maharashtra, India",
+    addressDisplay: "Mumbai, Maharashtra, India",
     companyWebsite: "https://ladvaenterprises.com/",
-    portfolioWebsite: "https://ladvaenterprises.github.io/card/",
-    linkedinUrl: "https://www.linkedin.com/in/mitesh-ladva",
+    cardWebsite: "https://card.ladvaenterprises.com/",
+    linkedinUrl: "https://www.linkedin.com/in/miteshladva/",
     photoUrl: "assets/profile.png",
-    vcfFileName: "Mitesh_Ladva_Executive.vcf",
+    logoUrl: "assets/ladva-logo.png",
+    vcfFileName: "Mitesh_Ladva.vcf",
     cardFileName: "Mitesh_Ladva_Visiting_Card.png",
-
-    // Resolves current URL dynamically
-    getActiveUrl: function() {
-      if (window.location.protocol.startsWith('http')) {
-        return window.location.origin + window.location.pathname;
-      }
-      return this.portfolioWebsite;
-    }
   };
 
-  const activeUrl = CONFIG.getActiveUrl();
+  const activeUrl = CONFIG.cardWebsite;
 
   // --------------------------------------------------------------------------
-  // 2. Section Tab Navigation (Manasi Polyclinic / Mobile NFC Pattern)
+  // 2. Section Tab Navigation
   // --------------------------------------------------------------------------
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabPanels = document.querySelectorAll('.tab-panel');
@@ -73,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Switch to specific tab from in-card links
+  // Switch to specific tab from in-card triggers
   document.querySelectorAll('[data-switch-tab]').forEach(el => {
     el.addEventListener('click', (e) => {
       e.preventDefault();
@@ -87,7 +81,30 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --------------------------------------------------------------------------
-  // 3. Dynamic QR Code Generation (High Quality, Standalone)
+  // 3. Accordion / Dropdown Feature for Services (Consulting, ISO, Training)
+  // --------------------------------------------------------------------------
+  const accordionHeaders = document.querySelectorAll('.service-accordion-header');
+
+  accordionHeaders.forEach(header => {
+    header.addEventListener('click', () => {
+      const item = header.parentElement;
+      const isOpen = item.classList.contains('open');
+
+      // Optionally close other accordions
+      document.querySelectorAll('.service-accordion-item').forEach(other => {
+        if (other !== item) other.classList.remove('open');
+      });
+
+      if (isOpen) {
+        item.classList.remove('open');
+      } else {
+        item.classList.add('open');
+      }
+    });
+  });
+
+  // --------------------------------------------------------------------------
+  // 4. Dynamic QR Code Generation (Pointing to card.ladvaenterprises.com)
   // --------------------------------------------------------------------------
   const qrContainer = document.getElementById('qrCodeContainer');
 
@@ -95,10 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof QRCode === 'undefined' || !qrContainer) return;
     qrContainer.innerHTML = '';
     new QRCode(qrContainer, {
-      text: activeUrl,
-      width: 190,
-      height: 190,
-      colorDark: "#101B2D",
+      text: CONFIG.cardWebsite,
+      width: 200,
+      height: 200,
+      colorDark: "#18343f",
       colorLight: "#ffffff",
       correctLevel: QRCode.CorrectLevel.H
     });
@@ -122,40 +139,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = exportCanvas.getContext('2d');
     if (!ctx) return;
 
-    // Navy background
-    ctx.fillStyle = '#101B2D';
+    // Slate Teal Background #18343f
+    ctx.fillStyle = '#18343f';
     ctx.fillRect(0, 0, size, height);
 
-    // Champagne gold border
-    ctx.strokeStyle = '#C9A96E';
+    // Light Blue Border
+    ctx.strokeStyle = '#38bdf8';
     ctx.lineWidth = 6;
     ctx.strokeRect(16, 16, size - 32, height - 32);
 
-    ctx.strokeStyle = 'rgba(201, 169, 110, 0.3)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
     ctx.lineWidth = 1.5;
     ctx.strokeRect(24, 24, size - 48, height - 48);
 
     // Header branding
-    ctx.fillStyle = '#C9A96E';
-    ctx.font = '600 15px "Plus Jakarta Sans", sans-serif';
+    ctx.fillStyle = '#38bdf8';
+    ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('LADVA ENTERPRISES • STRATEGIC CONSULTING', size / 2, 64);
+    ctx.fillText('LADVA ENTERPRISES', size / 2, 64);
 
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 30px "Playfair Display", serif';
-    ctx.fillText(CONFIG.fullName, size / 2, 106);
+    ctx.font = 'bold 28px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText(CONFIG.fullName, size / 2, 104);
 
-    ctx.fillStyle = '#9AA5B5';
-    ctx.font = '500 15px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText(CONFIG.title, size / 2, 134);
+    ctx.fillStyle = '#e0f2fe';
+    ctx.font = '500 14px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText(CONFIG.vcardTitle, size / 2, 132);
 
     // White box for QR code
     const boxSize = 400;
     const boxX = (size - boxSize) / 2;
-    const boxY = 168;
+    const boxY = 166;
 
     ctx.fillStyle = '#ffffff';
-    ctx.roundRect(boxX, boxY, boxSize, boxSize, 14);
+    ctx.roundRect(boxX, boxY, boxSize, boxSize, 16);
     ctx.fill();
 
     // Draw QR
@@ -163,17 +180,17 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.drawImage(canvas, boxX + qrPad, boxY + qrPad, boxSize - qrPad * 2, boxSize - qrPad * 2);
 
     // Footer instruction
-    ctx.fillStyle = '#C9A96E';
+    ctx.fillStyle = '#38bdf8';
     ctx.font = 'bold 18px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('SCAN TO SAVE CONTACT TO PHONEBOOK', size / 2, boxY + boxSize + 48);
+    ctx.fillText('SCAN TO SAVE CONTACT', size / 2, boxY + boxSize + 48);
 
-    ctx.fillStyle = '#9AA5B5';
+    ctx.fillStyle = '#ffffff';
     ctx.font = '13px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText(activeUrl, size / 2, boxY + boxSize + 74);
+    ctx.fillText(CONFIG.cardWebsite, size / 2, boxY + boxSize + 74);
 
     // Download
     const link = document.createElement('a');
-    link.download = 'Mitesh_Ladva_QR_Code.png';
+    link.download = 'Mitesh_Ladva_QR.png';
     link.href = exportCanvas.toDataURL('image/png');
     document.body.appendChild(link);
     link.click();
@@ -186,7 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnDownloadQR) btnDownloadQR.addEventListener('click', downloadQRCodeImage);
 
   // --------------------------------------------------------------------------
-  // 4. One-Click Save Contact (.vcf) Generator
+  // 5. One-Click Save Contact (.vcf) Generator
+  // Exact user requested vCard fields
   // --------------------------------------------------------------------------
   function downloadVCard() {
     const vCardLines = [
@@ -194,18 +212,16 @@ document.addEventListener('DOMContentLoaded', () => {
       'VERSION:3.0',
       `N:${CONFIG.lastName};${CONFIG.firstName};;;`,
       `FN:${CONFIG.fullName}`,
-      `ORG:${CONFIG.company};Strategic Consulting`,
-      `TITLE:${CONFIG.title}`,
-      `ROLE:Strategic Consultant & Managing Partner`,
+      `ORG:${CONFIG.company}`,
+      `TITLE:${CONFIG.vcardTitle}`,
       `TEL;TYPE=CELL,VOICE,PREF:${CONFIG.phoneInternational}`,
       `TEL;TYPE=WORK,VOICE:${CONFIG.phoneInternational}`,
       `EMAIL;TYPE=INTERNET,WORK,PREF:${CONFIG.email}`,
-      `EMAIL;TYPE=INTERNET,HOME:${CONFIG.personalEmail}`,
       `URL;TYPE=WORK:${CONFIG.companyWebsite}`,
-      `URL;TYPE=PREF:${activeUrl}`,
+      `URL;TYPE=PREF:${CONFIG.cardWebsite}`,
       `X-SOCIALPROFILE;TYPE=linkedin:${CONFIG.linkedinUrl}`,
       `ADR;TYPE=WORK,POSTAL,PARCEL:;;Mumbai;Maharashtra;;India`,
-      `NOTE:Founder & Managing Partner of Ladva Enterprises. Strategic consulting, digital transformation, enterprise BI & operational growth. Phone: ${CONFIG.phoneDisplay} | Email: ${CONFIG.email}`,
+      `NOTE:${CONFIG.quote} | ${CONFIG.vcardTitle}`,
       'REV:' + new Date().toISOString().replace(/[-:.]/g, ''),
       'END:VCARD'
     ];
@@ -225,10 +241,9 @@ document.addEventListener('DOMContentLoaded', () => {
       URL.revokeObjectURL(blobUrl);
     }, 1500);
 
-    showToast('Contact file downloaded! Tap file to add Mitesh to phonebook.');
+    showToast('Contact file downloaded! Tap to save in your phonebook.');
   }
 
-  // Bind all Save Contact buttons (Hero, Bottom Bar, and In-Tab)
   const heroSaveBtn = document.getElementById('heroSaveContactBtn');
   const bottomSaveBtn = document.getElementById('bottomSaveBtn');
   const tabSaveBtn = document.getElementById('tabSaveContactBtn');
@@ -238,7 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (tabSaveBtn) tabSaveBtn.addEventListener('click', downloadVCard);
 
   // --------------------------------------------------------------------------
-  // 5. Download Digital Visiting Card Image (High-Res Canvas PNG)
+  // 6. Download High-Res Digital Visiting Card Image (Canvas PNG)
   // --------------------------------------------------------------------------
   async function generateAndDownloadVisitingCard() {
     showToast('Generating executive visiting card...');
@@ -251,36 +266,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Navy Gradient Background
+    // Background Gradient: Deep Slate Teal #18343f to #0e2027
     const bg = ctx.createLinearGradient(0, 0, width, height);
-    bg.addColorStop(0, '#101B2D');
-    bg.addColorStop(0.5, '#172943');
-    bg.addColorStop(1, '#0C1524');
+    bg.addColorStop(0, '#18343f');
+    bg.addColorStop(0.6, '#142b34');
+    bg.addColorStop(1, '#0c1a20');
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, width, height);
 
-    // Metallic mesh fine lines
-    ctx.strokeStyle = 'rgba(201, 169, 110, 0.08)';
+    // Subtle aesthetic geometric background lines (soft light blue)
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.08)';
     ctx.lineWidth = 1;
-    for (let x = -width; x < width * 2; x += 60) {
+    for (let x = -width; x < width * 2; x += 50) {
       ctx.beginPath();
       ctx.moveTo(x, 0);
       ctx.lineTo(x + height, height);
       ctx.stroke();
     }
 
-    // Outer Champagne Gold Double Border
-    ctx.strokeStyle = '#C9A96E';
+    // Outer Crisp Light Blue Border
+    ctx.strokeStyle = '#38bdf8';
     ctx.lineWidth = 4;
     ctx.strokeRect(30, 30, width - 60, height - 60);
 
-    ctx.strokeStyle = 'rgba(201, 169, 110, 0.35)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
     ctx.lineWidth = 1.5;
     ctx.strokeRect(40, 40, width - 80, height - 80);
 
-    // Corner decorative triangles
-    const cSize = 22;
-    ctx.fillStyle = '#C9A96E';
+    // Corner decorative accents
+    const cSize = 24;
+    ctx.fillStyle = '#38bdf8';
     [[30, 30, 1, 1], [width - 30, 30, -1, 1], [30, height - 30, 1, -1], [width - 30, height - 30, -1, -1]].forEach(([x, y, dx, dy]) => {
       ctx.beginPath();
       ctx.moveTo(x, y);
@@ -289,12 +304,12 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.fill();
     });
 
-    // Profile Photo Frame
+    // Profile Photo Frame with Light Blue Ring
     const photoSize = 240;
     const photoX = 80;
     const photoY = 130;
 
-    ctx.strokeStyle = '#C9A96E';
+    ctx.strokeStyle = '#38bdf8';
     ctx.lineWidth = 4;
     ctx.beginPath();
     ctx.arc(photoX + photoSize / 2, photoY + photoSize / 2, photoSize / 2 + 6, 0, Math.PI * 2);
@@ -330,91 +345,92 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Badge below photo
-    ctx.fillStyle = '#C9A96E';
-    ctx.roundRect(photoX + 15, photoY + photoSize + 22, photoSize - 30, 36, 18);
+    ctx.fillStyle = '#0284c7';
+    ctx.roundRect(photoX + 10, photoY + photoSize + 22, photoSize - 20, 36, 18);
     ctx.fill();
 
-    ctx.fillStyle = '#101B2D';
-    ctx.font = 'bold 13px "Plus Jakarta Sans", sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('20+ YRS STRATEGIC EXPERTISE', photoX + photoSize / 2, photoY + photoSize + 45);
+    ctx.fillText('AI & TECHNOLOGY CONSULTANT', photoX + photoSize / 2, photoY + photoSize + 45);
 
     // Details Block
     const textX = 370;
 
     ctx.textAlign = 'left';
-    ctx.fillStyle = '#C9A96E';
+    ctx.fillStyle = '#38bdf8';
     ctx.font = 'bold 16px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('LADVA ENTERPRISES', textX, 120);
+    ctx.letterSpacing = '2px';
+    ctx.fillText('LADVA ENTERPRISES', textX, 115);
 
-    ctx.fillStyle = '#9AA5B5';
-    ctx.font = '500 13px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('STRATEGIC CONSULTING & ADVISORY', textX, 142);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = 'italic 13px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('“Make your life easy with us”', textX, 138);
 
     ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 44px "Playfair Display", Georgia, serif';
-    ctx.fillText(CONFIG.fullName, textX, 205);
+    ctx.font = 'bold 44px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText(CONFIG.fullName, textX, 195);
 
-    ctx.fillStyle = '#DFCEAA';
-    ctx.font = '600 20px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText(CONFIG.title, textX, 240);
+    ctx.fillStyle = '#7dd3fc';
+    ctx.font = '600 17px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('Founder • ' + CONFIG.vcardTitle, textX, 230);
 
-    // Gold divider line
-    const gradLine = ctx.createLinearGradient(textX, 260, textX + 450, 260);
-    gradLine.addColorStop(0, '#C9A96E');
-    gradLine.addColorStop(0.7, '#DFCEAA');
+    // Sky blue accent line
+    const gradLine = ctx.createLinearGradient(textX, 252, textX + 460, 252);
+    gradLine.addColorStop(0, '#38bdf8');
+    gradLine.addColorStop(0.7, '#0284c7');
     gradLine.addColorStop(1, 'transparent');
     ctx.strokeStyle = gradLine;
     ctx.lineWidth = 2.5;
     ctx.beginPath();
-    ctx.moveTo(textX, 260);
-    ctx.lineTo(textX + 450, 260);
+    ctx.moveTo(textX, 252);
+    ctx.lineTo(textX + 460, 252);
     ctx.stroke();
 
-    // Contact List
-    const contactStartY = 310;
+    // Contact Rows
+    const contactStartY = 300;
     const list = [
-      { label: 'PHONE', val: CONFIG.phoneDisplay },
+      { label: 'CALL', val: CONFIG.phoneDisplay },
       { label: 'EMAIL', val: CONFIG.email },
       { label: 'WEBSITE', val: CONFIG.companyWebsite },
-      { label: 'LOCATION', val: CONFIG.location }
+      { label: 'ADDRESS', val: CONFIG.addressDisplay }
     ];
 
     list.forEach((item, idx) => {
-      const y = contactStartY + idx * 44;
-      ctx.fillStyle = '#C9A96E';
+      const y = contactStartY + idx * 42;
+      ctx.fillStyle = '#38bdf8';
       ctx.beginPath();
       ctx.arc(textX + 8, y - 6, 4, 0, Math.PI * 2);
       ctx.fill();
 
       ctx.fillStyle = '#FFFFFF';
-      ctx.font = '500 17px "Plus Jakarta Sans", sans-serif';
+      ctx.font = '500 16px "Plus Jakarta Sans", sans-serif';
       ctx.fillText(item.val, textX + 28, y);
     });
 
-    // Services Pill
-    const pillsY = 515;
-    ctx.fillStyle = 'rgba(23, 41, 67, 0.85)';
-    ctx.roundRect(textX, pillsY, 520, 80, 10);
+    // Practice Areas Strip
+    const pillsY = 495;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.roundRect(textX, pillsY, 520, 85, 12);
     ctx.fill();
-    ctx.strokeStyle = 'rgba(201, 169, 110, 0.3)';
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    ctx.fillStyle = '#DFCEAA';
-    ctx.font = '600 12px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('PRACTICE AREAS:', textX + 16, pillsY + 28);
+    ctx.fillStyle = '#38bdf8';
+    ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('CORE EXPERTISE:', textX + 16, pillsY + 26);
 
-    ctx.fillStyle = '#9AA5B5';
+    ctx.fillStyle = '#e2e8f0';
     ctx.font = '13px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('Management Consulting • Strategy & Growth • Digital Transformation', textX + 16, pillsY + 48);
-    ctx.fillText('Legal & ISO Compliance • Financial Advisory & Working Capital', textX + 16, pillsY + 68);
+    ctx.fillText('1. Consulting (Management, Strategy, IT, HR, Legal, Financial)', textX + 16, pillsY + 46);
+    ctx.fillText('2. ISO Certification (9001, 14001, 45001)  |  3. Training (Excel, Power BI, Tableau)', textX + 16, pillsY + 68);
 
-    // QR Code on Card
+    // QR Code Box on the Right
     const qrCanvas = qrContainer ? qrContainer.querySelector('canvas') : null;
     const qrBoxSize = 190;
     const qrX = width - qrBoxSize - 75;
-    const qrY = 150;
+    const qrY = 145;
 
     ctx.fillStyle = '#FFFFFF';
     ctx.roundRect(qrX, qrY, qrBoxSize, qrBoxSize, 14);
@@ -425,16 +441,16 @@ document.addEventListener('DOMContentLoaded', () => {
       ctx.drawImage(qrCanvas, qrX + qrPad, qrY + qrPad, qrBoxSize - qrPad * 2, qrBoxSize - qrPad * 2);
     }
 
-    ctx.fillStyle = '#C9A96E';
+    ctx.fillStyle = '#38bdf8';
     ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('SCAN TO CONNECT', qrX + qrBoxSize / 2, qrY + qrBoxSize + 28);
+    ctx.fillText('SCAN TO CONNECT', qrX + qrBoxSize / 2, qrY + qrBoxSize + 26);
 
-    ctx.fillStyle = '#9AA5B5';
+    ctx.fillStyle = '#94a3b8';
     ctx.font = '11px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('Save Contact Instantly', qrX + qrBoxSize / 2, qrY + qrBoxSize + 46);
+    ctx.fillText('card.ladvaenterprises.com', qrX + qrBoxSize / 2, qrY + qrBoxSize + 44);
 
-    // Trigger download
+    // Download trigger
     const link = document.createElement('a');
     link.download = CONFIG.cardFileName;
     link.href = canvas.toDataURL('image/png', 1.0);
@@ -449,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (heroDownloadCardBtn) heroDownloadCardBtn.addEventListener('click', generateAndDownloadVisitingCard);
 
   // --------------------------------------------------------------------------
-  // 6. Share Modal & WhatsApp Forwarder
+  // 7. Share Modal & Forward via WhatsApp
   // --------------------------------------------------------------------------
   const shareModal = document.getElementById('shareModal');
   const closeShareModal = document.getElementById('closeShareModal');
@@ -473,7 +489,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnShareModalTrigger) btnShareModalTrigger.addEventListener('click', openShareModalPopup);
   if (bottomShareBtn) {
     bottomShareBtn.addEventListener('click', () => {
-      // Switch to QR tab on mobile or open share modal
       switchTab('tab-qr');
       const qrTab = document.getElementById('tab-qr');
       if (qrTab) qrTab.scrollIntoView({ behavior: 'smooth' });
@@ -486,24 +501,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Predefined WhatsApp message
   const whatsappMessage = 
-    `*🏛️ Mitesh Ladva - Founder & Managing Partner*\n` +
-    `*Ladva Enterprises | Strategic Consulting*\n\n` +
-    `_"Transforming organizations through strategic vision, data-driven clarity, and measurable execution."_\n\n` +
-    `💼 *Consulting Practices:*\n` +
-    `• Management Consulting & Organizational Restructuring\n` +
-    `• Strategy & Scalable Market Growth\n` +
-    `• IT & Digital Transformation (BigQuery, Looker, ERP, MIS)\n` +
-    `• HR & Executive Talent Strategy\n` +
-    `• Legal, Compliance & ISO (9001, 14001, 45001)\n` +
-    `• Financial Advisory & Working Capital Optimization\n\n` +
-    `📞 *Direct Mobile:* ${CONFIG.phoneDisplay}\n` +
-    `✉️ *Business Email:* ${CONFIG.email}\n` +
-    `🌐 *View Digital Business Card:* ${activeUrl}\n` +
-    `🏢 *Corporate Portal:* ${CONFIG.companyWebsite}`;
+    `*🏛️ Mitesh Ladva - Founder*\n` +
+    `*Ladva Enterprises*\n` +
+    `_"Make your life easy with us"_\n\n` +
+    `💼 *AI & Technology Consultant | ISO Certification | Digital Transformation*\n\n` +
+    `• Consulting (Management, Strategy, IT, HR, Legal, Financial)\n` +
+    `• ISO Certification (ISO 9001:2015, ISO 14001:2015, ISO 45001:2018)\n` +
+    `• Training (Advanced Excel, Power BI, Tableau)\n\n` +
+    `📞 *Call:* ${CONFIG.phoneDisplay}\n` +
+    `✉️ *Email:* ${CONFIG.email}\n` +
+    `🌐 *Digital Card:* ${CONFIG.cardWebsite}\n` +
+    `🏢 *Website:* ${CONFIG.companyWebsite}`;
 
-  // Share Channels
   const modalShareWhatsapp = document.getElementById('modalShareWhatsapp');
   if (modalShareWhatsapp) {
     modalShareWhatsapp.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappMessage)}`;
@@ -511,7 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const modalShareLinkedin = document.getElementById('modalShareLinkedin');
   if (modalShareLinkedin) {
-    modalShareLinkedin.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(activeUrl)}`;
+    modalShareLinkedin.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(CONFIG.cardWebsite)}`;
   }
 
   const modalShareEmail = document.getElementById('modalShareEmail');
@@ -519,7 +529,6 @@ document.addEventListener('DOMContentLoaded', () => {
     modalShareEmail.href = `mailto:?subject=${encodeURIComponent("Digital Visiting Card — Mitesh Ladva")}&body=${encodeURIComponent(whatsappMessage)}`;
   }
 
-  // Direct WhatsApp Forwarder Form in QR Tab
   const directWhatsAppShareForm = document.getElementById('directWhatsAppShareForm');
   if (directWhatsAppShareForm) {
     directWhatsAppShareForm.addEventListener('submit', (e) => {
@@ -542,12 +551,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Copy Profile Link
   function copyProfileUrl() {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(activeUrl)
-        .then(() => showToast('Profile link copied to clipboard!'))
-        .catch(() => fallbackClipboardCopy(activeUrl));
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(CONFIG.cardWebsite)
+        .then(() => showToast('Card link copied to clipboard!'))
+        .catch(() => fallbackClipboardCopy(CONFIG.cardWebsite));
     } else {
-      fallbackClipboardCopy(activeUrl);
+      fallbackClipboardCopy(CONFIG.cardWebsite);
     }
   }
 
@@ -561,7 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
     tempInput.select();
     try {
       document.execCommand('copy');
-      showToast('Profile link copied to clipboard!');
+      showToast('Card link copied to clipboard!');
     } catch (err) {
       showToast('Could not copy link.');
     }
@@ -575,42 +584,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const displayProfileUrl = document.getElementById('displayProfileUrl');
   const modalCopyUrlInput = document.getElementById('modalCopyUrlInput');
-  if (displayProfileUrl) displayProfileUrl.textContent = activeUrl;
-  if (modalCopyUrlInput) modalCopyUrlInput.value = activeUrl;
-
-  // --------------------------------------------------------------------------
-  // 7. Theme Toggle (Executive Dark Theme by default with Light Warm Ivory Mode)
-  // --------------------------------------------------------------------------
-  const btnThemeToggle = document.getElementById('btnThemeToggle');
-  const themeToggleIcon = document.getElementById('themeToggleIcon');
-  const themeToggleText = document.getElementById('themeToggleText');
-
-  function applyTheme(theme) {
-    if (theme === 'light') {
-      document.documentElement.setAttribute('data-theme', 'light');
-      if (themeToggleIcon) themeToggleIcon.className = 'ri-moon-line';
-      if (themeToggleText) themeToggleText.textContent = 'Dark Mode';
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-      if (themeToggleIcon) themeToggleIcon.className = 'ri-sun-line';
-      if (themeToggleText) themeToggleText.textContent = 'Light Mode';
-    }
-  }
-
-  const savedTheme = localStorage.getItem('mitesh_card_theme') || 'dark';
-  applyTheme(savedTheme);
-
-  if (btnThemeToggle) {
-    btnThemeToggle.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme');
-      const nextTheme = current === 'light' ? 'dark' : 'light';
-      localStorage.setItem('mitesh_card_theme', nextTheme);
-      applyTheme(nextTheme);
-    });
-  }
+  if (displayProfileUrl) displayProfileUrl.textContent = CONFIG.cardWebsite;
+  if (modalCopyUrlInput) modalCopyUrlInput.value = CONFIG.cardWebsite;
 
   // --------------------------------------------------------------------------
   // 8. Consultation Form Handler
+  // Fields: Name, Email ID, Mobile No, Area of Interest
   // --------------------------------------------------------------------------
   const consultationForm = document.getElementById('consultationForm');
   if (consultationForm) {
@@ -618,20 +597,33 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const name = document.getElementById('clientName')?.value || '';
       const email = document.getElementById('clientEmail')?.value || '';
+      const phone = document.getElementById('clientPhone')?.value || '';
       const area = document.getElementById('consultingArea')?.value || '';
 
-      if (!name || !email) {
-        showToast('Please fill in required fields');
+      if (!name || !email || !phone) {
+        showToast('Please fill in Name, Email ID, and Mobile No');
         return;
       }
 
-      showToast(`Thank you, ${name}! Your consultation request has been received.`);
+      // Pre-filled WhatsApp transmission option
+      const userMsg = 
+        `Hello Mitesh,\n` +
+        `I would like to book a consultation regarding *${area}*.\n\n` +
+        `• Name: ${name}\n` +
+        `• Email: ${email}\n` +
+        `• Mobile: ${phone}\n` +
+        `• Area: ${area}`;
+
+      const waUrl = `https://wa.me/${CONFIG.whatsappClean}?text=${encodeURIComponent(userMsg)}`;
+      window.open(waUrl, '_blank', 'noopener,noreferrer');
+
+      showToast(`Thank you, ${name}! Consultation brief sent via WhatsApp.`);
       consultationForm.reset();
     });
   }
 
   // --------------------------------------------------------------------------
-  // 9. Toast Notification Helper
+  // 9. Toast Helper
   // --------------------------------------------------------------------------
   let toastTimer = null;
   function showToast(message) {
@@ -648,9 +640,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 3800);
   }
 
-  // --------------------------------------------------------------------------
-  // 10. Keyboard Accessibility (Escape closes modals)
-  // --------------------------------------------------------------------------
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeShareModalPopup();
@@ -659,4 +648,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log('Mitesh Ladva — Executive Digital Business Card initialized.');
 });
-
