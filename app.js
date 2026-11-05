@@ -659,3 +659,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log('Mitesh Ladva — Executive Digital Business Card initialized.');
 });
+
