@@ -256,6 +256,27 @@ document.addEventListener('DOMContentLoaded', () => {
   // --------------------------------------------------------------------------
   // 6. Download High-Res Digital Visiting Card Image (Canvas PNG)
   // --------------------------------------------------------------------------
+  function getImageForCanvas(url, domId) {
+    if (domId) {
+      const el = document.getElementById(domId);
+      if (el && el.complete && el.naturalWidth > 0) {
+        return Promise.resolve(el);
+      }
+    }
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = () => {
+        const fallback = new Image();
+        fallback.crossOrigin = 'anonymous';
+        fallback.onload = () => resolve(fallback);
+        fallback.onerror = () => resolve(null);
+        fallback.src = url;
+      };
+      img.src = url;
+    });
+  }
+
   async function generateAndDownloadVisitingCard() {
     showToast('Generating executive visiting card...');
 
@@ -312,26 +333,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const photoCenterX = photoX + photoSize / 2;
     const photoCenterY = photoY + photoSize / 2;
 
-    ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.arc(photoCenterX, photoCenterY, photoSize / 2 + 5, 0, Math.PI * 2);
-    ctx.stroke();
-
     try {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.src = CONFIG.photoUrl + '?v=' + Date.now();
-      await new Promise(r => { img.onload = r; img.onerror = r; });
-
-      if (img.complete && img.naturalWidth > 0) {
+      const photoEl = await getImageForCanvas(CONFIG.photoUrl, 'profilePhoto');
+      if (photoEl && photoEl.naturalWidth > 0) {
         ctx.save();
         ctx.beginPath();
         ctx.arc(photoCenterX, photoCenterY, photoSize / 2, 0, Math.PI * 2);
         ctx.closePath();
         ctx.clip();
 
-        const aspect = img.width / img.height;
+        const aspect = photoEl.naturalWidth / photoEl.naturalHeight;
         let dw = photoSize, dh = photoSize, dx = photoX, dy = photoY;
         if (aspect < 1) {
           dh = photoSize / aspect;
@@ -340,12 +351,18 @@ document.addEventListener('DOMContentLoaded', () => {
           dw = photoSize * aspect;
           dx = photoX - (dw - photoSize) / 2;
         }
-        ctx.drawImage(img, dx, dy, dw, dh);
+        ctx.drawImage(photoEl, dx, dy, dw, dh);
         ctx.restore();
       }
     } catch (e) {
       console.warn('Canvas photo render skipped', e);
     }
+
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(photoCenterX, photoCenterY, photoSize / 2 + 5, 0, Math.PI * 2);
+    ctx.stroke();
 
     // Name below photo: Mitesh Ladva
     ctx.fillStyle = '#FFFFFF';
@@ -437,17 +454,14 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.stroke();
 
     try {
-      const logoImg = new Image();
-      logoImg.crossOrigin = 'anonymous';
-      logoImg.src = CONFIG.logoUrl + '?v=' + Date.now();
-      await new Promise(r => { logoImg.onload = r; logoImg.onerror = r; });
+      const logoEl = await getImageForCanvas(CONFIG.logoUrl, null);
 
-      if (logoImg.complete && logoImg.naturalWidth > 0) {
+      if (logoEl && logoEl.naturalWidth > 0) {
         const padX = 22;
         const padY = 14;
         const maxW = centerLogoBoxW - padX * 2;
         const maxH = centerLogoBoxH - padY * 2;
-        const aspect = logoImg.naturalWidth / logoImg.naturalHeight;
+        const aspect = logoEl.naturalWidth / logoEl.naturalHeight;
 
         let dw = maxW;
         let dh = dw / aspect;
@@ -458,7 +472,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const dx = centerLogoBoxX + (centerLogoBoxW - dw) / 2;
         const dy = centerLogoBoxY + (centerLogoBoxH - dh) / 2;
-        ctx.drawImage(logoImg, dx, dy, dw, dh);
+        ctx.drawImage(logoEl, dx, dy, dw, dh);
       }
     } catch (e) {
       console.warn('Center logo render skipped', e);
