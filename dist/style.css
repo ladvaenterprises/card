@@ -966,43 +966,47 @@ body {
   color: var(--brand-teal);
 }
 
-/* ──────────────── CLIENT LOGOS ONLY ──────────────── */
+/* ──────────────── CLIENT LOGOS (2x2 / 2-COLUMN FORMAT - BIGGER LOGOS) ──────────────── */
 .clients-logo-showcase {
-  margin-top: 14px;
+  margin-top: 16px;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
 }
 
 .client-logo-pure-box {
-  padding: 16px 8px;
+  min-height: 84px;
+  padding: 18px 16px;
   background: #ffffff;
   border: 1.5px solid var(--border-light);
-  border-radius: 12px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: var(--shadow-subtle);
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .client-logo-pure-box:hover {
   border-color: var(--sky-border);
   transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.12);
 }
 
 .client-logo-pure-box img {
-  max-height: 38px;
-  max-width: 95px;
+  max-height: 52px;
+  max-width: 135px;
+  width: auto;
+  height: auto;
   object-fit: contain;
   /* Original colors permanently preserved - no grayscale */
-  filter: none;
-  opacity: 1;
+  filter: none !important;
+  opacity: 1 !important;
   transition: transform 0.2s ease;
 }
 
 .client-logo-pure-box:hover img {
-  transform: scale(1.05);
+  transform: scale(1.06);
 }
 
 /* ──────────────── FIXED BOTTOM ACTION BAR ──────────────── */
@@ -1270,6 +1274,17 @@ body {
   .quick-icon-label {
     font-size: 8px;
   }
+  .clients-logo-showcase {
+    gap: 8px;
+  }
+  .client-logo-pure-box {
+    min-height: 72px;
+    padding: 12px 10px;
+  }
+  .client-logo-pure-box img {
+    max-height: 44px;
+    max-width: 110px;
+  }
 }
 
 @media screen and (max-width: 325px) {
@@ -1287,5 +1302,13 @@ body {
   }
   .quick-icon-label {
     font-size: 7.5px;
+  }
+  .client-logo-pure-box {
+    min-height: 64px;
+    padding: 10px 8px;
+  }
+  .client-logo-pure-box img {
+    max-height: 38px;
+    max-width: 95px;
   }
 }
