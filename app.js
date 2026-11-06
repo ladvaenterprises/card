@@ -355,6 +355,48 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.textAlign = 'center';
     ctx.fillText('AI & TECHNOLOGY CONSULTANT', photoX + photoSize / 2, photoY + photoSize + 45);
 
+    // Ladva Enterprises Logo in the space below Profile Photo
+    const logoBoxW = photoSize;
+    const logoBoxH = 96;
+    const logoBoxX = photoX;
+    const logoBoxY = photoY + photoSize + 74;
+
+    ctx.fillStyle = '#ffffff';
+    ctx.roundRect(logoBoxX, logoBoxY, logoBoxW, logoBoxH, 14);
+    ctx.fill();
+
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    try {
+      const logoImg = new Image();
+      logoImg.crossOrigin = 'anonymous';
+      logoImg.src = CONFIG.logoUrl;
+      await new Promise(r => { logoImg.onload = r; logoImg.onerror = r; });
+
+      if (logoImg.complete && logoImg.naturalWidth > 0) {
+        const padX = 14;
+        const padY = 10;
+        const maxW = logoBoxW - padX * 2;
+        const maxH = logoBoxH - padY * 2;
+        const aspect = logoImg.naturalWidth / logoImg.naturalHeight;
+
+        let dw = maxW;
+        let dh = dw / aspect;
+        if (dh > maxH) {
+          dh = maxH;
+          dw = dh * aspect;
+        }
+
+        const dx = logoBoxX + (logoBoxW - dw) / 2;
+        const dy = logoBoxY + (logoBoxH - dh) / 2;
+        ctx.drawImage(logoImg, dx, dy, dw, dh);
+      }
+    } catch (e) {
+      console.warn('Canvas logo render skipped', e);
+    }
+
     // Details Block
     const textX = 370;
 
