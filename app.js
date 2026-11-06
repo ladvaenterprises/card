@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     photoUrl: "assets/profile.png",
     logoUrl: "assets/ladva-logo.png",
     vcfFileName: "Mitesh_Ladva.vcf",
-    cardFileName: "Mitesh_Ladva_Visiting_Card.png",
+    cardFileName: "Mitesh_Ladva_Visiting_Card.jpg",
   };
 
   const activeUrl = CONFIG.cardWebsite;
@@ -545,7 +545,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const heroDownloadCardBtn = document.getElementById('heroDownloadCardBtn');
-  if (heroDownloadCardBtn) heroDownloadCardBtn.addEventListener('click', generateAndDownloadVisitingCard);
+  if (heroDownloadCardBtn) {
+    heroDownloadCardBtn.addEventListener('click', () => {
+      showToast('Downloading executive visiting card...');
+    });
+  }
 
   // --------------------------------------------------------------------------
   // 7. Share Modal & Forward via WhatsApp
