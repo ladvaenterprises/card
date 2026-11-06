@@ -10,7 +10,7 @@ if (!fs.existsSync(distDir)) {
 }
 
 // Files to copy to dist
-const rootFiles = ['index.html', 'style.css', 'app.js', 'README.md'];
+const rootFiles = ['index.html', 'style.css', 'card-assets.js', 'app.js', 'README.md'];
 rootFiles.forEach(file => {
   const src = path.join(__dirname, file);
   const dest = path.join(distDir, file);

@@ -256,85 +256,123 @@ document.addEventListener('DOMContentLoaded', () => {
   // --------------------------------------------------------------------------
   // 6. Download High-Res Digital Visiting Card Image (Canvas PNG)
   // --------------------------------------------------------------------------
-  function getImageForCanvas(url, domId) {
-    if (domId) {
-      const el = document.getElementById(domId);
-      if (el && el.complete && el.naturalWidth > 0) {
-        return Promise.resolve(el);
-      }
-    }
+  function getImageForCanvas(src) {
     return new Promise((resolve) => {
+      if (!src) return resolve(null);
       const img = new Image();
       img.onload = () => resolve(img);
       img.onerror = () => {
-        const fallback = new Image();
-        fallback.crossOrigin = 'anonymous';
-        fallback.onload = () => resolve(fallback);
-        fallback.onerror = () => resolve(null);
-        fallback.src = url;
+        console.warn('Image load failed for canvas:', src.slice(0, 40));
+        resolve(null);
       };
-      img.src = url;
+      img.src = src;
     });
+  }
+
+  function downloadCanvasImage(canvas, fileName) {
+    try {
+      if (canvas.toBlob) {
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const blobUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = fileName;
+            link.href = blobUrl;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+            showToast('Visiting Card downloaded successfully!');
+          } else {
+            fallbackDataUrlDownload(canvas, fileName);
+          }
+        }, 'image/png');
+      } else {
+        fallbackDataUrlDownload(canvas, fileName);
+      }
+    } catch (err) {
+      console.warn('toBlob export error, falling back to data URL:', err);
+      fallbackDataUrlDownload(canvas, fileName);
+    }
+  }
+
+  function fallbackDataUrlDownload(canvas, fileName) {
+    try {
+      const dataUrl = canvas.toDataURL('image/png', 1.0);
+      const link = document.createElement('a');
+      link.download = fileName;
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('Visiting Card downloaded successfully!');
+    } catch (e) {
+      console.error('Canvas export error:', e);
+      showToast('Download blocked by browser security. Please take a screenshot.');
+    }
   }
 
   async function generateAndDownloadVisitingCard() {
     showToast('Generating executive visiting card...');
 
-    const width = 1200;
-    const height = 700;
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    // Background Gradient: Deep Slate Teal #18343f to #0e2027
-    const bg = ctx.createLinearGradient(0, 0, width, height);
-    bg.addColorStop(0, '#18343f');
-    bg.addColorStop(0.6, '#142b34');
-    bg.addColorStop(1, '#0c1a20');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, width, height);
-
-    // Subtle aesthetic geometric background lines (soft light blue)
-    ctx.strokeStyle = 'rgba(56, 189, 248, 0.08)';
-    ctx.lineWidth = 1;
-    for (let x = -width; x < width * 2; x += 50) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x + height, height);
-      ctx.stroke();
-    }
-
-    // Outer Crisp Light Blue Border
-    ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 4;
-    ctx.strokeRect(30, 30, width - 60, height - 60);
-
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(40, 40, width - 80, height - 80);
-
-    // Corner decorative accents
-    const cSize = 24;
-    ctx.fillStyle = '#38bdf8';
-    [[30, 30, 1, 1], [width - 30, 30, -1, 1], [30, height - 30, 1, -1], [width - 30, height - 30, -1, -1]].forEach(([x, y, dx, dy]) => {
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + dx * cSize, y);
-      ctx.lineTo(x, y + dy * cSize);
-      ctx.fill();
-    });
-
-    // Profile Photo Frame with Light Blue Ring
-    const photoSize = 210;
-    const photoX = 75;
-    const photoY = 120;
-    const photoCenterX = photoX + photoSize / 2;
-    const photoCenterY = photoY + photoSize / 2;
-
     try {
-      const photoEl = await getImageForCanvas(CONFIG.photoUrl, 'profilePhoto');
+      const width = 1200;
+      const height = 700;
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // Background Gradient: Deep Slate Teal #18343f to #0e2027
+      const bg = ctx.createLinearGradient(0, 0, width, height);
+      bg.addColorStop(0, '#18343f');
+      bg.addColorStop(0.6, '#142b34');
+      bg.addColorStop(1, '#0c1a20');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, width, height);
+
+      // Subtle aesthetic geometric background lines (soft light blue)
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.08)';
+      ctx.lineWidth = 1;
+      for (let x = -width; x < width * 2; x += 50) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x + height, height);
+        ctx.stroke();
+      }
+
+      // Outer Crisp Light Blue Border
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(30, 30, width - 60, height - 60);
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+      ctx.lineWidth = 1.5;
+      ctx.strokeRect(40, 40, width - 80, height - 80);
+
+      // Corner decorative accents
+      const cSize = 24;
+      ctx.fillStyle = '#38bdf8';
+      [[30, 30, 1, 1], [width - 30, 30, -1, 1], [30, height - 30, 1, -1], [width - 30, height - 30, -1, -1]].forEach(([x, y, dx, dy]) => {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + dx * cSize, y);
+        ctx.lineTo(x, y + dy * cSize);
+        ctx.fill();
+      });
+
+      // Profile Photo Frame with Light Blue Ring
+      const photoSize = 210;
+      const photoX = 75;
+      const photoY = 120;
+      const photoCenterX = photoX + photoSize / 2;
+      const photoCenterY = photoY + photoSize / 2;
+
+      // Load Profile Photo (prefer untainted base64 data URL)
+      const photoSrc = (window.CARD_ASSETS && window.CARD_ASSETS.photo) ? window.CARD_ASSETS.photo : CONFIG.photoUrl;
+      const photoEl = await getImageForCanvas(photoSrc);
+
       if (photoEl && photoEl.naturalWidth > 0) {
         ctx.save();
         ctx.beginPath();
@@ -354,107 +392,105 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.drawImage(photoEl, dx, dy, dw, dh);
         ctx.restore();
       }
-    } catch (e) {
-      console.warn('Canvas photo render skipped', e);
-    }
 
-    ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 4;
-    ctx.beginPath();
-    ctx.arc(photoCenterX, photoCenterY, photoSize / 2 + 5, 0, Math.PI * 2);
-    ctx.stroke();
-
-    // Name below photo: Mitesh Ladva
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 24px "Plus Jakarta Sans", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Mitesh Ladva', photoCenterX, photoY + photoSize + 40);
-
-    // Badge below name: Business Consultant
-    const badgeW = 186;
-    const badgeH = 32;
-    const badgeX = photoCenterX - badgeW / 2;
-    const badgeY = photoY + photoSize + 55;
-
-    ctx.fillStyle = '#0284c7';
-    ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 16);
-    ctx.fill();
-
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 12.5px "Plus Jakarta Sans", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Business Consultant', photoCenterX, badgeY + 21);
-
-    // Details Block (Center Column)
-    const textX = 350;
-
-    ctx.textAlign = 'left';
-    ctx.fillStyle = '#38bdf8';
-    ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
-    ctx.letterSpacing = '2px';
-    ctx.fillText('LADVA ENTERPRISES', textX, 108);
-
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = 'italic 13px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('“Make your life easy with us”', textX, 130);
-
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 40px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText(CONFIG.fullName, textX, 180);
-
-    ctx.fillStyle = '#7dd3fc';
-    ctx.font = '600 16px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('Founder • ' + CONFIG.vcardTitle, textX, 212);
-
-    // Sky blue accent line
-    const gradLine = ctx.createLinearGradient(textX, 230, textX + 480, 230);
-    gradLine.addColorStop(0, '#38bdf8');
-    gradLine.addColorStop(0.7, '#0284c7');
-    gradLine.addColorStop(1, 'transparent');
-    ctx.strokeStyle = gradLine;
-    ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    ctx.moveTo(textX, 230);
-    ctx.lineTo(textX + 480, 230);
-    ctx.stroke();
-
-    // Contact Rows
-    const contactStartY = 270;
-    const list = [
-      { label: 'CALL', val: CONFIG.phoneDisplay },
-      { label: 'EMAIL', val: CONFIG.email },
-      { label: 'WEBSITE', val: CONFIG.companyWebsite },
-      { label: 'ADDRESS', val: CONFIG.addressDisplay }
-    ];
-
-    list.forEach((item, idx) => {
-      const y = contactStartY + idx * 36;
-      ctx.fillStyle = '#38bdf8';
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 4;
       ctx.beginPath();
-      ctx.arc(textX + 8, y - 5, 4, 0, Math.PI * 2);
+      ctx.arc(photoCenterX, photoCenterY, photoSize / 2 + 5, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // Name below photo: Mitesh Ladva
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 24px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Mitesh Ladva', photoCenterX, photoY + photoSize + 40);
+
+      // Badge below name: Business Consultant
+      const badgeW = 186;
+      const badgeH = 32;
+      const badgeX = photoCenterX - badgeW / 2;
+      const badgeY = photoY + photoSize + 55;
+
+      ctx.fillStyle = '#0284c7';
+      ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 16);
       ctx.fill();
 
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 12.5px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Business Consultant', photoCenterX, badgeY + 21);
+
+      // Details Block (Center Column)
+      const textX = 350;
+
+      ctx.textAlign = 'left';
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
+      ctx.letterSpacing = '2px';
+      ctx.fillText('LADVA ENTERPRISES', textX, 108);
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = 'italic 13px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('“Make your life easy with us”', textX, 130);
+
       ctx.fillStyle = '#FFFFFF';
-      ctx.font = '500 15px "Plus Jakarta Sans", sans-serif';
-      ctx.fillText(item.val, textX + 28, y);
-    });
+      ctx.font = 'bold 40px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(CONFIG.fullName, textX, 180);
 
-    // Center-Middle Below: Ladva Enterprises Logo Container (as requested)
-    const centerLogoBoxX = textX;
-    const centerLogoBoxY = 430;
-    const centerLogoBoxW = 490;
-    const centerLogoBoxH = 150;
+      ctx.fillStyle = '#7dd3fc';
+      ctx.font = '600 16px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('Founder • ' + CONFIG.vcardTitle, textX, 212);
 
-    ctx.fillStyle = '#ffffff';
-    ctx.roundRect(centerLogoBoxX, centerLogoBoxY, centerLogoBoxW, centerLogoBoxH, 16);
-    ctx.fill();
+      // Sky blue accent line
+      const gradLine = ctx.createLinearGradient(textX, 230, textX + 480, 230);
+      gradLine.addColorStop(0, '#38bdf8');
+      gradLine.addColorStop(0.7, '#0284c7');
+      gradLine.addColorStop(1, 'transparent');
+      ctx.strokeStyle = gradLine;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(textX, 230);
+      ctx.lineTo(textX + 480, 230);
+      ctx.stroke();
 
-    ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 2;
-    ctx.stroke();
+      // Contact Rows
+      const contactStartY = 270;
+      const list = [
+        { label: 'CALL', val: CONFIG.phoneDisplay },
+        { label: 'EMAIL', val: CONFIG.email },
+        { label: 'WEBSITE', val: CONFIG.companyWebsite },
+        { label: 'ADDRESS', val: CONFIG.addressDisplay }
+      ];
 
-    try {
-      const logoEl = await getImageForCanvas(CONFIG.logoUrl, null);
+      list.forEach((item, idx) => {
+        const y = contactStartY + idx * 36;
+        ctx.fillStyle = '#38bdf8';
+        ctx.beginPath();
+        ctx.arc(textX + 8, y - 5, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '500 15px "Plus Jakarta Sans", sans-serif';
+        ctx.fillText(item.val, textX + 28, y);
+      });
+
+      // Center-Middle Below: Ladva Enterprises Logo Container (as requested)
+      const centerLogoBoxX = textX;
+      const centerLogoBoxY = 430;
+      const centerLogoBoxW = 490;
+      const centerLogoBoxH = 150;
+
+      ctx.fillStyle = '#ffffff';
+      ctx.roundRect(centerLogoBoxX, centerLogoBoxY, centerLogoBoxW, centerLogoBoxH, 16);
+      ctx.fill();
+
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Load Logo (prefer untainted base64 data URL)
+      const logoSrc = (window.CARD_ASSETS && window.CARD_ASSETS.logo) ? window.CARD_ASSETS.logo : CONFIG.logoUrl;
+      const logoEl = await getImageForCanvas(logoSrc);
 
       if (logoEl && logoEl.naturalWidth > 0) {
         const padX = 22;
@@ -474,43 +510,38 @@ document.addEventListener('DOMContentLoaded', () => {
         const dy = centerLogoBoxY + (centerLogoBoxH - dh) / 2;
         ctx.drawImage(logoEl, dx, dy, dw, dh);
       }
-    } catch (e) {
-      console.warn('Center logo render skipped', e);
+
+      // QR Code Box on the Right
+      const qrCanvas = qrContainer ? qrContainer.querySelector('canvas') : null;
+      const qrBoxSize = 190;
+      const qrX = width - qrBoxSize - 75;
+      const qrY = 145;
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.roundRect(qrX, qrY, qrBoxSize, qrBoxSize, 14);
+      ctx.fill();
+
+      if (qrCanvas) {
+        const qrPad = 14;
+        ctx.drawImage(qrCanvas, qrX + qrPad, qrY + qrPad, qrBoxSize - qrPad * 2, qrBoxSize - qrPad * 2);
+      }
+
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('SCAN TO CONNECT', qrX + qrBoxSize / 2, qrY + qrBoxSize + 26);
+
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '11px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText('card.ladvaenterprises.com', qrX + qrBoxSize / 2, qrY + qrBoxSize + 44);
+
+      // Safe export trigger (Blob + dataURL fallback)
+      downloadCanvasImage(canvas, CONFIG.cardFileName);
+
+    } catch (err) {
+      console.error('Visiting card generation error:', err);
+      showToast('Could not generate visiting card. Please try again.');
     }
-
-    // QR Code Box on the Right
-    const qrCanvas = qrContainer ? qrContainer.querySelector('canvas') : null;
-    const qrBoxSize = 190;
-    const qrX = width - qrBoxSize - 75;
-    const qrY = 145;
-
-    ctx.fillStyle = '#FFFFFF';
-    ctx.roundRect(qrX, qrY, qrBoxSize, qrBoxSize, 14);
-    ctx.fill();
-
-    if (qrCanvas) {
-      const qrPad = 14;
-      ctx.drawImage(qrCanvas, qrX + qrPad, qrY + qrPad, qrBoxSize - qrPad * 2, qrBoxSize - qrPad * 2);
-    }
-
-    ctx.fillStyle = '#38bdf8';
-    ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('SCAN TO CONNECT', qrX + qrBoxSize / 2, qrY + qrBoxSize + 26);
-
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '11px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('card.ladvaenterprises.com', qrX + qrBoxSize / 2, qrY + qrBoxSize + 44);
-
-    // Download trigger
-    const link = document.createElement('a');
-    link.download = CONFIG.cardFileName;
-    link.href = canvas.toDataURL('image/png', 1.0);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    showToast('Digital Visiting Card downloaded successfully!');
   }
 
   const heroDownloadCardBtn = document.getElementById('heroDownloadCardBtn');
