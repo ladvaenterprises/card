@@ -306,26 +306,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Profile Photo Frame with Light Blue Ring
-    const photoSize = 240;
-    const photoX = 80;
-    const photoY = 130;
+    const photoSize = 210;
+    const photoX = 75;
+    const photoY = 120;
+    const photoCenterX = photoX + photoSize / 2;
+    const photoCenterY = photoY + photoSize / 2;
 
     ctx.strokeStyle = '#38bdf8';
     ctx.lineWidth = 4;
     ctx.beginPath();
-    ctx.arc(photoX + photoSize / 2, photoY + photoSize / 2, photoSize / 2 + 6, 0, Math.PI * 2);
+    ctx.arc(photoCenterX, photoCenterY, photoSize / 2 + 5, 0, Math.PI * 2);
     ctx.stroke();
 
     try {
       const img = new Image();
       img.crossOrigin = 'anonymous';
-      img.src = CONFIG.photoUrl;
+      img.src = CONFIG.photoUrl + '?v=' + Date.now();
       await new Promise(r => { img.onload = r; img.onerror = r; });
 
       if (img.complete && img.naturalWidth > 0) {
         ctx.save();
         ctx.beginPath();
-        ctx.arc(photoX + photoSize / 2, photoY + photoSize / 2, photoSize / 2, 0, Math.PI * 2);
+        ctx.arc(photoCenterX, photoCenterY, photoSize / 2, 0, Math.PI * 2);
         ctx.closePath();
         ctx.clip();
 
@@ -333,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let dw = photoSize, dh = photoSize, dx = photoX, dy = photoY;
         if (aspect < 1) {
           dh = photoSize / aspect;
-          dy = photoY - (dh - photoSize) * 0.25;
+          dy = photoY - (dh - photoSize) * 0.15;
         } else {
           dw = photoSize * aspect;
           dx = photoX - (dw - photoSize) / 2;
@@ -345,41 +347,106 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn('Canvas photo render skipped', e);
     }
 
-    // Badge below photo
+    // Name below photo: Mitesh Ladva
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 24px "Plus Jakarta Sans", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Mitesh Ladva', photoCenterX, photoY + photoSize + 40);
+
+    // Badge below name: Business Consultant
+    const badgeW = 186;
+    const badgeH = 32;
+    const badgeX = photoCenterX - badgeW / 2;
+    const badgeY = photoY + photoSize + 55;
+
     ctx.fillStyle = '#0284c7';
-    ctx.roundRect(photoX + 10, photoY + photoSize + 22, photoSize - 20, 36, 18);
+    ctx.roundRect(badgeX, badgeY, badgeW, badgeH, 16);
     ctx.fill();
 
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
+    ctx.font = 'bold 12.5px "Plus Jakarta Sans", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('AI & TECHNOLOGY CONSULTANT', photoX + photoSize / 2, photoY + photoSize + 45);
+    ctx.fillText('Business Consultant', photoCenterX, badgeY + 21);
 
-    // Ladva Enterprises Logo in the space below Profile Photo
-    const logoBoxW = photoSize;
-    const logoBoxH = 96;
-    const logoBoxX = photoX;
-    const logoBoxY = photoY + photoSize + 74;
+    // Details Block (Center Column)
+    const textX = 350;
+
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#38bdf8';
+    ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
+    ctx.letterSpacing = '2px';
+    ctx.fillText('LADVA ENTERPRISES', textX, 108);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = 'italic 13px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('“Make your life easy with us”', textX, 130);
+
+    ctx.fillStyle = '#FFFFFF';
+    ctx.font = 'bold 40px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText(CONFIG.fullName, textX, 180);
+
+    ctx.fillStyle = '#7dd3fc';
+    ctx.font = '600 16px "Plus Jakarta Sans", sans-serif';
+    ctx.fillText('Founder • ' + CONFIG.vcardTitle, textX, 212);
+
+    // Sky blue accent line
+    const gradLine = ctx.createLinearGradient(textX, 230, textX + 480, 230);
+    gradLine.addColorStop(0, '#38bdf8');
+    gradLine.addColorStop(0.7, '#0284c7');
+    gradLine.addColorStop(1, 'transparent');
+    ctx.strokeStyle = gradLine;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(textX, 230);
+    ctx.lineTo(textX + 480, 230);
+    ctx.stroke();
+
+    // Contact Rows
+    const contactStartY = 270;
+    const list = [
+      { label: 'CALL', val: CONFIG.phoneDisplay },
+      { label: 'EMAIL', val: CONFIG.email },
+      { label: 'WEBSITE', val: CONFIG.companyWebsite },
+      { label: 'ADDRESS', val: CONFIG.addressDisplay }
+    ];
+
+    list.forEach((item, idx) => {
+      const y = contactStartY + idx * 36;
+      ctx.fillStyle = '#38bdf8';
+      ctx.beginPath();
+      ctx.arc(textX + 8, y - 5, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '500 15px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(item.val, textX + 28, y);
+    });
+
+    // Center-Middle Below: Ladva Enterprises Logo Container (as requested)
+    const centerLogoBoxX = textX;
+    const centerLogoBoxY = 430;
+    const centerLogoBoxW = 490;
+    const centerLogoBoxH = 150;
 
     ctx.fillStyle = '#ffffff';
-    ctx.roundRect(logoBoxX, logoBoxY, logoBoxW, logoBoxH, 14);
+    ctx.roundRect(centerLogoBoxX, centerLogoBoxY, centerLogoBoxW, centerLogoBoxH, 16);
     ctx.fill();
 
     ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = 2;
     ctx.stroke();
 
     try {
       const logoImg = new Image();
       logoImg.crossOrigin = 'anonymous';
-      logoImg.src = CONFIG.logoUrl;
+      logoImg.src = CONFIG.logoUrl + '?v=' + Date.now();
       await new Promise(r => { logoImg.onload = r; logoImg.onerror = r; });
 
       if (logoImg.complete && logoImg.naturalWidth > 0) {
-        const padX = 14;
-        const padY = 10;
-        const maxW = logoBoxW - padX * 2;
-        const maxH = logoBoxH - padY * 2;
+        const padX = 22;
+        const padY = 14;
+        const maxW = centerLogoBoxW - padX * 2;
+        const maxH = centerLogoBoxH - padY * 2;
         const aspect = logoImg.naturalWidth / logoImg.naturalHeight;
 
         let dw = maxW;
@@ -389,85 +456,13 @@ document.addEventListener('DOMContentLoaded', () => {
           dw = dh * aspect;
         }
 
-        const dx = logoBoxX + (logoBoxW - dw) / 2;
-        const dy = logoBoxY + (logoBoxH - dh) / 2;
+        const dx = centerLogoBoxX + (centerLogoBoxW - dw) / 2;
+        const dy = centerLogoBoxY + (centerLogoBoxH - dh) / 2;
         ctx.drawImage(logoImg, dx, dy, dw, dh);
       }
     } catch (e) {
-      console.warn('Canvas logo render skipped', e);
+      console.warn('Center logo render skipped', e);
     }
-
-    // Details Block
-    const textX = 370;
-
-    ctx.textAlign = 'left';
-    ctx.fillStyle = '#38bdf8';
-    ctx.font = 'bold 16px "Plus Jakarta Sans", sans-serif';
-    ctx.letterSpacing = '2px';
-    ctx.fillText('LADVA ENTERPRISES', textX, 115);
-
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = 'italic 13px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('“Make your life easy with us”', textX, 138);
-
-    ctx.fillStyle = '#FFFFFF';
-    ctx.font = 'bold 44px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText(CONFIG.fullName, textX, 195);
-
-    ctx.fillStyle = '#7dd3fc';
-    ctx.font = '600 17px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('Founder • ' + CONFIG.vcardTitle, textX, 230);
-
-    // Sky blue accent line
-    const gradLine = ctx.createLinearGradient(textX, 252, textX + 460, 252);
-    gradLine.addColorStop(0, '#38bdf8');
-    gradLine.addColorStop(0.7, '#0284c7');
-    gradLine.addColorStop(1, 'transparent');
-    ctx.strokeStyle = gradLine;
-    ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    ctx.moveTo(textX, 252);
-    ctx.lineTo(textX + 460, 252);
-    ctx.stroke();
-
-    // Contact Rows
-    const contactStartY = 300;
-    const list = [
-      { label: 'CALL', val: CONFIG.phoneDisplay },
-      { label: 'EMAIL', val: CONFIG.email },
-      { label: 'WEBSITE', val: CONFIG.companyWebsite },
-      { label: 'ADDRESS', val: CONFIG.addressDisplay }
-    ];
-
-    list.forEach((item, idx) => {
-      const y = contactStartY + idx * 42;
-      ctx.fillStyle = '#38bdf8';
-      ctx.beginPath();
-      ctx.arc(textX + 8, y - 6, 4, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.fillStyle = '#FFFFFF';
-      ctx.font = '500 16px "Plus Jakarta Sans", sans-serif';
-      ctx.fillText(item.val, textX + 28, y);
-    });
-
-    // Practice Areas Strip
-    const pillsY = 495;
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
-    ctx.roundRect(textX, pillsY, 520, 85, 12);
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    ctx.fillStyle = '#38bdf8';
-    ctx.font = 'bold 12px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('CORE EXPERTISE:', textX + 16, pillsY + 26);
-
-    ctx.fillStyle = '#e2e8f0';
-    ctx.font = '13px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('1. Consulting (Management, Strategy, IT, HR, Legal, Financial)', textX + 16, pillsY + 46);
-    ctx.fillText('2. ISO Certification (9001, 14001, 45001)  |  3. Training (Excel, Power BI, Tableau)', textX + 16, pillsY + 68);
 
     // QR Code Box on the Right
     const qrCanvas = qrContainer ? qrContainer.querySelector('canvas') : null;
