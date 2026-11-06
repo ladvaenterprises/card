@@ -876,59 +876,6 @@ body {
   color: var(--sky-primary);
 }
 
-/* Featured Manufacturing with Client Logos */
-.industry-pill-item.industry-featured-manufacturing {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 14px 16px;
-  background: #ffffff;
-  border: 1.5px solid var(--sky-border);
-  border-radius: 14px;
-}
-
-.industry-item-title-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--brand-teal);
-}
-
-.industry-item-title-row i {
-  font-size: 18px;
-  color: var(--sky-primary);
-}
-
-.industry-manufacturing-logos {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-}
-
-.industry-logo-wrapper {
-  flex: 1;
-  padding: 8px 12px;
-  background: var(--sky-subtle);
-  border: 1px solid var(--sky-border);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.industry-logo-wrapper img {
-  max-height: 30px;
-  max-width: 100%;
-  object-fit: contain;
-  filter: none;
-  opacity: 1;
-}
-
 /* ──────────────── IMPACT / SELECTED OUTCOMES ──────────────── */
 .impact-outcomes-box {
   margin-top: 14px;
