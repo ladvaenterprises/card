@@ -1009,6 +1009,17 @@ body {
   transform: scale(1.06);
 }
 
+/* Enhanced visual scale for E-Trav logo */
+.client-logo-pure-box.logo-etrav img {
+  max-height: 60px;
+  max-width: 130px;
+  transform: scale(1.18);
+}
+
+.client-logo-pure-box.logo-etrav:hover img {
+  transform: scale(1.26);
+}
+
 /* ──────────────── FIXED BOTTOM ACTION BAR ──────────────── */
 .bottom-action-bar {
   position: fixed;
