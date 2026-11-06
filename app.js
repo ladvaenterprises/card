@@ -544,11 +544,56 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // --------------------------------------------------------------------------
+  // Direct Download Engine: Downloads the finalized card directly to phone storage
+  // Forces application/octet-stream so mobile devices SAVE rather than open in browser
+  // --------------------------------------------------------------------------
+  function downloadVisitingCardDirect(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    showToast('Downloading Visiting Card to your device...');
+
+    const fileName = 'Mitesh_Ladva_Visiting_Card.jpg';
+    const filePath = 'assets/Mitesh_Ladva_Visiting_Card.jpg';
+
+    fetch(filePath)
+      .then(response => {
+        if (!response.ok) throw new Error('File fetch failed');
+        return response.blob();
+      })
+      .then(blob => {
+        // application/octet-stream guarantees the browser saves the file instead of opening it
+        const octetBlob = new Blob([blob], { type: 'application/octet-stream' });
+        const blobUrl = URL.createObjectURL(octetBlob);
+        const link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = blobUrl;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        setTimeout(() => {
+          document.body.removeChild(link);
+          URL.revokeObjectURL(blobUrl);
+        }, 3000);
+        showToast('Visiting Card downloaded to phone!');
+      })
+      .catch(err => {
+        console.warn('Blob fetch failed, falling back to direct anchor', err);
+        const link = document.createElement('a');
+        link.style.display = 'none';
+        link.href = filePath;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+  }
+
   const heroDownloadCardBtn = document.getElementById('heroDownloadCardBtn');
   if (heroDownloadCardBtn) {
-    heroDownloadCardBtn.addEventListener('click', () => {
-      showToast('Downloading executive visiting card...');
-    });
+    heroDownloadCardBtn.addEventListener('click', downloadVisitingCardDirect);
   }
 
   // --------------------------------------------------------------------------
