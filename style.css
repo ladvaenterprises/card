@@ -874,6 +874,15 @@ body {
 .industry-pill-item i {
   font-size: 16px;
   color: var(--sky-primary);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* RemixIcon factory alias fallback */
+.ri-factory-line:before {
+  content: "\eb0d";
 }
 
 /* ──────────────── IMPACT / SELECTED OUTCOMES ──────────────── */
